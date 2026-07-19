@@ -51,46 +51,13 @@ fun Route.testSep24(
         amountExpected = "10".toBigDecimal()
       }
       try {
+        val tokenParam = call.request.queryParameters["token"] ?: throw ClientException("Missing token parameter in the request")
         when (transaction.kind.lowercase()) {
           "deposit" -> {
-            val account =
-              transaction.destinationAccount
-                ?: throw ClientException("Missing destination_account field")
-            val asset =
-              token.data["asset"] ?: throw ClientException("Missing amountExpected.asset field")
-            val memo = transaction.memo
-
-            if (!asset.startsWith("stellar:")) {
-              throw ClientException("Invalid asset format")
-            }
-
-            call.respondText("The sep24 interactive deposit has been successfully started.")
-
-            val stellarAsset = asset.replace("stellar:", "")
-
-            // Run deposit processing asynchronously
-            CoroutineScope(Job()).launch {
-              depositService.processDeposit(
-                transactionId,
-                amountExpected,
-                account,
-                stellarAsset,
-                memo
-              )
-            }
+            call.respondRedirect("http://localhost:3001/bank/interactive?transaction_id=${transactionId}&token=${tokenParam}&kind=deposit")
           }
           "withdrawal" -> {
-            call.respondText("The sep24 interactive withdrawal has been successfully started.")
-
-            val asset =
-              token.data["asset"] ?: throw ClientException("Missing amountExpected.asset field")
-
-            val stellarAsset = asset.replace("stellar:", "")
-
-            // Run withdrawal processing asynchronously
-            CoroutineScope(Dispatchers.Default).launch {
-              withdrawalService.processWithdrawal(transactionId, amountExpected, stellarAsset)
-            }
+            call.respondRedirect("http://localhost:3001/bank/interactive?transaction_id=${transactionId}&token=${tokenParam}&kind=withdrawal")
           }
           else ->
             call.respondText(

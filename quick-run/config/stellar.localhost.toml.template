@@ -19,6 +19,15 @@ is_asset_anchored = false
 anchor_asset_type = "crypto"
 desc = "XLM, the native token of the Stellar network."
 
+[[CURRENCIES]]
+code = "USDC"
+issuer = "${USDC_ISSUER_PUBLIC}"
+status = "test"
+is_asset_anchored = true
+anchor_asset_type = "crypto"
+desc = "USDC, simulated on local testnet."
+
+
 [DOCUMENTATION]
 ORG_NAME = "Stellar Development Foundation"
 ORG_URL = "https://stellar.org"

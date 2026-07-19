@@ -121,18 +121,40 @@ echo -e "${YELLOW}Step 4: Creating config files from templates...${NC}"
 # Export for docker-compose
 export HOST_SEP10_SECRET_KEY
 
+# Query dynamic USDC issuer address from wallet DB
+USDC_ISSUER_PUBLIC=$(node -e '
+try {
+  const config = require("../../stellar-pay/config.json");
+  console.log(config.usdc_issuer_public || "GDCD2HWDLUMQN37V7PMVIMPMT5MD5YPW3P6WPLCVBHQ4F25B2PJOCCB7");
+} catch (e) {
+  try {
+    const Database = require("better-sqlite3");
+    const db = new Database("../../stellar-pay/stellarpay.db");
+    const row = db.prepare("SELECT value FROM config WHERE key = ?").get("usdc_issuer_public");
+    console.log(row ? row.value : "GDCD2HWDLUMQN37V7PMVIMPMT5MD5YPW3P6WPLCVBHQ4F25B2PJOCCB7");
+  } catch (err) {
+    console.log("GDCD2HWDLUMQN37V7PMVIMPMT5MD5YPW3P6WPLCVBHQ4F25B2PJOCCB7");
+  }
+}
+' 2>/dev/null || echo "GDCD2HWDLUMQN37V7PMVIMPMT5MD5YPW3P6WPLCVBHQ4F25B2PJOCCB7")
+
+echo "  ℹ Dynamic USDC Issuer detected: $USDC_ISSUER_PUBLIC"
+
 # Create working config files from templates using sed
 # Update reference-config.yaml - paymentSigningSeed and distributionWallet
 sed "s|\${DISTRIBUTION_ACCOUNT_SECRET_KEY}|$DISTRIBUTION_ACCOUNT_SECRET_KEY|g" config/reference-config.yaml.template | \
 sed "s|\${DISTRIBUTION_ACCOUNT}|$DISTRIBUTION_ACCOUNT|g" > config/reference-config.yaml
-# Update stellar.localhost.toml - SIGNING_KEY and ACCOUNTS
+# Update stellar.localhost.toml - SIGNING_KEY, ACCOUNTS, and USDC_ISSUER_PUBLIC
 sed "s|\${DISTRIBUTION_ACCOUNT}|$DISTRIBUTION_ACCOUNT|g" config/stellar.localhost.toml.template | \
-sed "s|\${HOST_SEP10_ACCOUNT}|$HOST_SEP10_ACCOUNT|g" > config/stellar.localhost.toml
-# Update assets.yaml - distribution_account
-sed "s|\${DISTRIBUTION_ACCOUNT}|$DISTRIBUTION_ACCOUNT|g" config/assets.yaml.template > config/assets.yaml
+sed "s|\${HOST_SEP10_ACCOUNT}|$HOST_SEP10_ACCOUNT|g" | \
+sed "s|\${USDC_ISSUER_PUBLIC}|$USDC_ISSUER_PUBLIC|g" > config/stellar.localhost.toml
+# Update assets.yaml - distribution_account and USDC_ISSUER_PUBLIC
+sed "s|\${DISTRIBUTION_ACCOUNT}|$DISTRIBUTION_ACCOUNT|g" config/assets.yaml.template | \
+sed "s|\${USDC_ISSUER_PUBLIC}|$USDC_ISSUER_PUBLIC|g" > config/assets.yaml
 echo "  ✓ Created config/reference-config.yaml from template"
 echo "  ✓ Created config/stellar.localhost.toml from template"
 echo "  ✓ Created config/assets.yaml from template"
+
 
 echo -e "${YELLOW}Step 5: Starting docker-compose...${NC}"
 
