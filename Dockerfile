@@ -44,3 +44,4 @@ COPY --from=build /code/service-runner/build/libs/anchor-platform-runner*.jar /a
 COPY --from=build /code/scripts/docker-start.sh /app/start.sh
 
 ENTRYPOINT ["/bin/bash", "/app/start.sh"]
+CMD ["--sep-server", "--platform-server", "--event-processor"]
