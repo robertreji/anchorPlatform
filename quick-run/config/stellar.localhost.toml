@@ -1,0 +1,36 @@
+ACCOUNTS = ["GAP4O5ALNBU3VKQXJYPEG3IPROT5MQNCO5QUL6UIUTDRKESPPSWFGRWR"]
+VERSION = "0.1.0"
+SIGNING_KEY = "GDAXQYGDZG7FUN6Z7EDKLSA5KEC33DXGG6Z6EJR2KDQIH5TMHXULFWWO"
+NETWORK_PASSPHRASE = "Test SDF Network ; September 2015"
+
+WEB_AUTH_ENDPOINT = "https://anchorplatform-production.up.railway.app/auth"
+KYC_SERVER = "https://anchorplatform-production.up.railway.app/sep12"
+TRANSFER_SERVER = "https://anchorplatform-production.up.railway.app/sep6"
+TRANSFER_SERVER_SEP0024 = "https://anchorplatform-production.up.railway.app/sep24"
+DIRECT_PAYMENT_SERVER = "https://anchorplatform-production.up.railway.app/sep31"
+ANCHOR_QUOTE_SERVER = "https://anchorplatform-production.up.railway.app/sep38"
+
+[[CURRENCIES]]
+code = "native"
+status = "test"
+is_asset_anchored = false
+anchor_asset_type = "crypto"
+desc = "XLM, the native token of the Stellar network."
+
+[[CURRENCIES]]
+code = "USDC"
+issuer = "GAJ553PWUPQDOJBP33JKEHXJXCGT5QTU7U245Y243MMQUA4QBQIJ55ND"
+status = "test"
+is_asset_anchored = true
+anchor_asset_type = "crypto"
+desc = "USDC, simulated on local testnet."
+
+
+[DOCUMENTATION]
+ORG_NAME = "Stellar Development Foundation"
+ORG_URL = "https://stellar.org"
+ORG_DESCRIPTION = "The Stellar Development Foundation (SDF) is a non-profit organization whose mission is to create equitable access to the global financial system."
+ORG_KEYBASE = "stellar.public"
+ORG_TWITTER = "StellarOrg"
+ORG_GITHUB = "stellar"
+
