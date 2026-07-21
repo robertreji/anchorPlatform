@@ -90,7 +90,7 @@ items:
           description: Have CAD sent directly to your bank account.
 
   # USDC
-  - id: stellar:USDC:GAJ553PWUPQDOJBP33JKEHXJXCGT5QTU7U245Y243MMQUA4QBQIJ55ND
+  - id: stellar:USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN
     distribution_account: GAP4O5ALNBU3VKQXJYPEG3IPROT5MQNCO5QUL6UIUTDRKESPPSWFGRWR
     significant_decimals: 2
     sep6:
